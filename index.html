@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>True Life | Gang Territory</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+–red: #c0392b;
+–red2: #e74c3c;
+–gold: #f39c12;
+–dark: #0d0d0d;
+–dark2: #111;
+–dark3: #1a1a1a;
+–gray: #555;
+–gray2: #888;
+–white: #e8e8e8;
+}
+
+body {
+background: #000;
+color: var(–white);
+font-family: ‘Oswald’, sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+/* ===== LOGIN PAGE ===== */
+#login-page {
+position: fixed;
+inset: 0;
+z-index: 100;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+transition: opacity 0.7s ease;
+}
+
+#login-page.out {
+opacity: 0;
+pointer-events: none;
+}
+
+.login-bg {
+position: absolute;
+inset: 0;
+background:
+linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 100%),
+url(‘https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80’) center/cover no-repeat;
+}
+
+.login-bg::after {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: repeating-linear-gradient(
+0deg, transparent, transparent 3px,
+rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+);
+}
+
+.login-logo {
+position: relative;
+z-index: 2;
+text-align: center;
+margin-bottom: 40px;
+animation: fadeDown 0.8s ease both;
+}
+
+.login-logo .word-true {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 80px;
+letter-spacing: 10px;
+color: #fff;
+line-height: 1;
+font-style: italic;
+text-shadow: 3px 3px 20px rgba(0,0,0,0.8), 0 0 60px rgba(192,57,43,0.3);
+}
+
+.login-logo .word-life {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 80px;
+letter-spacing: 10px;
+color: #fff;
+line-height: 1;
+text-shadow: 3px 3px 20px rgba(0,0,0,0.8);
+}
+
+.login-box {
+position: relative;
+z-index: 2;
+background: rgba(0,0,0,0.75);
+border: 1px solid rgba(255,255,255,0.1);
+padding: 35px 45px 40px;
+width: 340px;
+backdrop-filter: blur(8px);
+animation: fadeUp 0.8s ease 0.2s both;
+}
+
+.login-box label {
+display: block;
+font-size: 11px;
+letter-spacing: 3px;
+color: var(–gray2);
+text-transform: uppercase;
+margin-bottom: 6px;
+margin-top: 18px;
+}
+
+.login-box label:first-child { margin-top: 0; }
+
+.login-box input {
+width: 100%;
+background: rgba(255,255,255,0.07);
+border: 1px solid rgba(255,255,255,0.15);
+border-bottom: 1px solid rgba(255,255,255,0.3);
+color: #fff;
+padding: 10px 14px;
+font-family: ‘Oswald’, sans-serif;
+font-size: 15px;
+letter-spacing: 2px;
+outline: none;
+transition: all 0.25s;
+}
+
+.login-box input:focus {
+border-color: var(–red2);
+background: rgba(192,57,43,0.08);
+}
+
+.btn-access {
+width: 100%;
+margin-top: 25px;
+padding: 13px;
+background: var(–red);
+border: none;
+color: #fff;
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+letter-spacing: 6px;
+cursor: pointer;
+transition: all 0.25s;
+position: relative;
+overflow: hidden;
+}
+
+.btn-access:hover {
+background: var(–red2);
+letter-spacing: 9px;
+}
+
+.btn-access::after {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+transform: translateX(-100%);
+transition: transform 0.5s;
+}
+
+.btn-access:hover::after { transform: translateX(100%); }
+
+.login-error {
+font-size: 11px;
+color: var(–red2);
+text-align: center;
+margin-top: 10px;
+letter-spacing: 1px;
+min-height: 16px;
+}
+
+/* ===== GAME PAGE ===== */
+#game-page {
+display: none;
+min-height: 100vh;
+flex-direction: column;
+}
+#game-page.show { display: flex; }
+
+/* HEADER */
+.g-header {
+background: rgba(10,10,10,0.97);
+border-bottom: 2px solid var(–red);
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 24px;
+height: 60px;
+position: sticky;
+top: 0;
+z-index: 50;
+}
+
+.g-logo {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+letter-spacing: 3px;
+font-style: italic;
+}
+
+.g-logo em { font-style: italic; color: #fff; }
+.g-logo span { color: var(–gray2); font-style: normal; font-size: 13px; letter-spacing: 2px; margin-left: 8px; }
+
+.g-nav { display: flex; gap: 2px; }
+
+.g-nav-btn {
+background: none;
+border: none;
+color: var(–gray2);
+font-family: ‘Oswald’, sans-serif;
+font-size: 12px;
+letter-spacing: 2px;
+padding: 6px 14px;
+cursor: pointer;
+text-transform: uppercase;
+transition: all 0.2s;
+border-bottom: 2px solid transparent;
+}
+.g-nav-btn:hover, .g-nav-btn.active { color: #fff; border-bottom-color: var(–red); }
+
+.g-user {
+display: flex;
+align-items: center;
+gap: 10px;
+font-size: 13px;
+}
+
+.g-user-name { color: #fff; letter-spacing: 1px; }
+.g-user-tag { color: var(–gold); font-size: 10px; letter-spacing: 2px; }
+
+.g-avatar {
+width: 36px; height: 36px;
+background: var(–red);
+display: flex; align-items: center; justify-content: center;
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 18px;
+border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-logout {
+background: none;
+border: 1px solid #333;
+color: #666;
+padding: 5px 12px;
+font-family: ‘Oswald’, sans-serif;
+font-size: 11px;
+letter-spacing: 2px;
+cursor: pointer;
+text-transform: uppercase;
+transition: all 0.2s;
+}
+.btn-logout:hover { border-color: var(–red); color: var(–red); }
+
+/* HERO IMAGE SECTION */
+.g-hero {
+position: relative;
+height: 380px;
+overflow: hidden;
+flex-shrink: 0;
+}
+
+.g-hero-img {
+width: 100%; height: 100%;
+object-fit: cover;
+object-position: center 30%;
+filter: brightness(0.55) contrast(1.1);
+}
+
+.g-hero-overlay {
+position: absolute;
+inset: 0;
+background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.8) 100%);
+}
+
+.g-hero-content {
+position: absolute;
+bottom: 30px;
+left: 30px;
+right: 30px;
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+}
+
+.g-hero-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 52px;
+letter-spacing: 6px;
+line-height: 1;
+font-style: italic;
+text-shadow: 2px 2px 20px rgba(0,0,0,0.8);
+}
+.g-hero-title span { color: var(–red); font-style: normal; }
+
+.g-hero-sub {
+font-size: 12px;
+letter-spacing: 4px;
+color: var(–gray2);
+margin-top: 5px;
+text-transform: uppercase;
+}
+
+.g-hero-stats {
+display: flex;
+gap: 25px;
+text-align: center;
+}
+
+.h-stat-val {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 32px;
+color: var(–gold);
+letter-spacing: 2px;
+line-height: 1;
+}
+.h-stat-lbl {
+font-size: 9px;
+letter-spacing: 2px;
+color: var(–gray2);
+text-transform: uppercase;
+margin-top: 2px;
+}
+
+/* MAIN LAYOUT */
+.g-main {
+flex: 1;
+display: grid;
+grid-template-columns: 260px 1fr 280px;
+gap: 0;
+background: #0a0a0a;
+}
+
+/* SIDEBAR LEFT */
+.g-sidebar-left {
+background: #0d0d0d;
+border-right: 1px solid #1a1a1a;
+padding: 0;
+}
+
+.sidebar-section {
+border-bottom: 1px solid #1a1a1a;
+}
+
+.sidebar-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 13px;
+letter-spacing: 3px;
+color: var(–gray2);
+padding: 14px 18px 10px;
+text-transform: uppercase;
+border-bottom: 1px solid #1a1a1a;
+}
+
+/* Territory */
+.territory-list { padding: 8px 0; }
+
+.territory-item {
+padding: 10px 18px;
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+transition: background 0.15s;
+border-left: 3px solid transparent;
+}
+.territory-item:hover { background: #151515; }
+.territory-item.owned { border-left-color: var(–red); }
+.territory-item.enemy { border-left-color: #2980b9; }
+.territory-item.neutral { border-left-color: #444; }
+.territory-item.conflict { border-left-color: var(–gold); }
+
+.t-dot {
+width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.t-dot.owned { background: var(–red); box-shadow: 0 0 6px var(–red); }
+.t-dot.enemy { background: #2980b9; }
+.t-dot.neutral { background: #444; }
+.t-dot.conflict { background: var(–gold); animation: blink 1s infinite; }
+
+@keyframes blink { 50% { opacity: 0.3; } }
+
+.t-name { font-size: 13px; letter-spacing: 1px; flex: 1; }
+.t-status { font-size: 10px; color: var(–gray2); letter-spacing: 1px; }
+
+/* Crew */
+.crew-list { padding: 8px 0; }
+
+.crew-item {
+padding: 9px 18px;
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+transition: background 0.15s;
+}
+.crew-item:hover { background: #151515; }
+
+.crew-face {
+width: 30px; height: 30px;
+background: #1e1e1e;
+border: 1px solid #333;
+display: flex; align-items: center; justify-content: center;
+font-size: 15px;
+flex-shrink: 0;
+}
+
+.crew-info .c-name { font-size: 12px; letter-spacing: 1px; }
+.crew-info .c-role { font-size: 10px; color: var(–gray2); margin-top: 1px; }
+
+.c-online {
+width: 7px; height: 7px; border-radius: 50%; margin-left: auto; flex-shrink: 0;
+}
+.c-online.on { background: #27ae60; box-shadow: 0 0 5px #27ae60; }
+.c-online.busy { background: var(–gold); }
+.c-online.off { background: #333; }
+
+/* CENTER CONTENT */
+.g-center {
+padding: 22px;
+display: flex;
+flex-direction: column;
+gap: 18px;
+overflow-y: auto;
+}
+
+/* Territory Control Bar */
+.control-banner {
+background: #111;
+border: 1px solid #1e1e1e;
+border-top: 2px solid var(–red);
+padding: 16px 20px;
+}
+
+.control-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+}
+
+.control-label {
+font-size: 10px;
+letter-spacing: 3px;
+color: var(–gray2);
+text-transform: uppercase;
+}
+
+.control-pct {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 24px;
+color: var(–red);
+letter-spacing: 2px;
+}
+
+.control-bar {
+height: 18px;
+background: #0d0d0d;
+border: 1px solid #222;
+display: flex;
+overflow: hidden;
+}
+
+.cb-yours { background: var(–red); height: 100%; transition: width 1.2s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; font-size: 9px; letter-spacing: 1px; }
+.cb-neutral { background: #2a2a2a; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #555; }
+.cb-enemy { background: #1a3a5c; height: 100%; display: flex; align-items: center; justify-content: flex-start; padding-left: 5px; font-size: 9px; letter-spacing: 1px; color: #5dade2; }
+
+/* Stats Row */
+.stats-row {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 10px;
+}
+
+.stat-box {
+background: #111;
+border: 1px solid #1e1e1e;
+padding: 14px 16px;
+border-top: 2px solid #222;
+position: relative;
+}
+.stat-box.red { border-top-color: var(–red); }
+.stat-box.gold { border-top-color: var(–gold); }
+.stat-box.blue { border-top-color: #2980b9; }
+.stat-box.green { border-top-color: #27ae60; }
+
+.stat-box .s-lbl { font-size: 9px; letter-spacing: 3px; color: var(–gray2); text-transform: uppercase; margin-bottom: 6px; }
+.stat-box .s-val { font-family: ‘Bebas Neue’, sans-serif; font-size: 30px; letter-spacing: 2px; line-height: 1; }
+.stat-box .s-sub { font-size: 10px; color: var(–gray2); margin-top: 3px; }
+.stat-box .s-bar { height: 2px; background: #1a1a1a; margin-top: 8px; overflow: hidden; }
+.stat-box .s-bar-fill { height: 100%; background: var(–red); }
+
+/* Missions Panel */
+.panel {
+background: #111;
+border: 1px solid #1e1e1e;
+}
+
+.panel-head {
+padding: 12px 18px;
+border-bottom: 1px solid #1a1a1a;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.panel-name {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 16px;
+letter-spacing: 3px;
+}
+
+.panel-tag {
+font-size: 10px;
+letter-spacing: 2px;
+color: var(–red);
+border: 1px solid rgba(192,57,43,0.4);
+background: rgba(192,57,43,0.08);
+padding: 2px 8px;
+}
+
+.panel-body { padding: 0; }
+
+/* Mission Items */
+.mission {
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 13px 18px;
+border-bottom: 1px solid #151515;
+cursor: pointer;
+transition: background 0.15s;
+border-left: 3px solid transparent;
+position: relative;
+}
+.mission:last-child { border-bottom: none; }
+.mission:hover { background: #161616; }
+.mission.high { border-left-color: var(–red); }
+.mission.med { border-left-color: var(–gold); }
+.mission.low { border-left-color: #333; }
+
+.m-icon { font-size: 22px; width: 36px; text-align: center; flex-shrink: 0; }
+.m-info { flex: 1; }
+.m-name { font-size: 13px; letter-spacing: 1px; margin-bottom: 2px; }
+.m-desc { font-size: 11px; color: var(–gray2); }
+.m-reward { text-align: right; flex-shrink: 0; }
+.m-cash { font-family: ‘Bebas Neue’, sans-serif; font-size: 17px; color: var(–gold); letter-spacing: 1px; }
+.m-xp { font-size: 10px; color: var(–gray2); letter-spacing: 1px; }
+
+/* Action Buttons */
+.actions-row {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 8px;
+}
+
+.act-btn {
+background: #111;
+border: 1px solid #1e1e1e;
+color: var(–gray2);
+padding: 14px 8px;
+font-family: ‘Oswald’, sans-serif;
+font-size: 11px;
+letter-spacing: 2px;
+cursor: pointer;
+text-transform: uppercase;
+text-align: center;
+transition: all 0.2s;
+}
+.act-btn:hover {
+background: rgba(192,57,43,0.1);
+border-color: var(–red);
+color: #fff;
+}
+.act-btn .a-ico { font-size: 22px; display: block; margin-bottom: 6px; }
+
+/* SIDEBAR RIGHT */
+.g-sidebar-right {
+background: #0d0d0d;
+border-left: 1px solid #1a1a1a;
+}
+
+/* Feed */
+.feed-item {
+padding: 12px 16px;
+border-bottom: 1px solid #151515;
+display: flex;
+gap: 10px;
+}
+.feed-item:last-child { border-bottom: none; }
+
+.feed-dot { width: 6px; height: 6px; background: var(–red); flex-shrink: 0; margin-top: 6px; }
+.feed-dot.gold { background: var(–gold); }
+.feed-dot.blue { background: #2980b9; }
+
+.feed-text { font-size: 12px; color: #999; line-height: 1.5; }
+.feed-text strong { color: #ccc; font-weight: 500; }
+.feed-text .hi { color: var(–gold); }
+.feed-time { font-size: 10px; color: #444; margin-top: 3px; }
+
+/* Leaderboard */
+.lb-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 9px 16px;
+border-bottom: 1px solid #151515;
+cursor: pointer;
+transition: background 0.15s;
+}
+.lb-item:hover { background: #111; }
+
+.lb-rank { font-family: ‘Bebas Neue’, sans-serif; font-size: 18px; color: #333; width: 22px; text-align: center; flex-shrink: 0; }
+.lb-rank.top { color: var(–gold); }
+.lb-name { flex: 1; font-size: 12px; letter-spacing: 1px; }
+.lb-val { font-family: ‘Bebas Neue’, sans-serif; font-size: 15px; color: var(–gold); letter-spacing: 1px; }
+
+/* MAP OVERLAY */
+#map-modal {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.85);
+z-index: 200;
+align-items: center;
+justify-content: center;
+}
+#map-modal.open { display: flex; }
+
+.map-box {
+background: #0d0d0d;
+border: 1px solid #333;
+border-top: 2px solid var(–red);
+width: 700px;
+max-width: 95vw;
+animation: fadeUp 0.3s ease both;
+}
+
+.map-head {
+padding: 14px 20px;
+border-bottom: 1px solid #1a1a1a;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.map-head-title { font-family: ‘Bebas Neue’, sans-serif; font-size: 18px; letter-spacing: 3px; }
+.map-close { background: none; border: none; color: #666; font-size: 20px; cursor: pointer; transition: color 0.2s; }
+.map-close:hover { color: var(–red); }
+
+.map-canvas {
+position: relative;
+height: 380px;
+background: #080808;
+overflow: hidden;
+}
+
+.map-grid-bg {
+position: absolute;
+inset: 0;
+background-image:
+linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+background-size: 35px 35px;
+}
+
+.zone {
+position: absolute;
+border: 2px solid;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.25s;
+text-align: center;
+padding: 6px;
+}
+.zone:hover { filter: brightness(1.4); transform: scale(1.03); z-index: 5; }
+
+.zone-n { font-family: ‘Bebas Neue’, sans-serif; font-size: 12px; letter-spacing: 2px; }
+.zone-s { font-size: 9px; margin-top: 2px; opacity: 0.8; }
+
+.zone.owned { border-color: var(–red); background: rgba(192,57,43,0.15); color: var(–red); }
+.zone.enemy { border-color: #2980b9; background: rgba(41,128,185,0.12); color: #5dade2; }
+.zone.neutral { border-color: #444; background: rgba(80,80,80,0.1); color: #777; }
+.zone.conflict { border-color: var(–gold); background: rgba(243,156,18,0.12); color: var(–gold);
+animation: zone-pulse 1.5s infinite; }
+
+@keyframes zone-pulse {
+0%,100% { box-shadow: 0 0 8px currentColor; }
+50% { box-shadow: 0 0 22px currentColor, inset 0 0 10px rgba(243,156,18,0.1); }
+}
+
+.map-legend {
+position: absolute;
+bottom: 10px;
+right: 12px;
+display: flex;
+gap: 14px;
+}
+.ml-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #666; letter-spacing: 1px; }
+.ml-dot { width: 7px; height: 7px; }
+
+/* NOTIFICATION */
+.notif {
+position: fixed;
+top: 72px;
+right: -320px;
+width: 290px;
+background: #111;
+border: 1px solid #222;
+border-left: 3px solid var(–red);
+padding: 14px 18px;
+z-index: 300;
+transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+font-size: 12px;
+letter-spacing: 0.5px;
+}
+.notif.show { right: 16px; }
+.notif-title { color: var(–red); font-size: 10px; letter-spacing: 3px; margin-bottom: 4px; text-transform: uppercase; }
+
+/* Animations */
+@keyframes fadeDown {
+from { opacity: 0; transform: translateY(-25px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media(max-width:1100px) {
+.g-main { grid-template-columns: 220px 1fr; }
+.g-sidebar-right { display: none; }
+.stats-row { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:700px) {
+.g-main { grid-template-columns: 1fr; }
+.g-sidebar-left { display: none; }
+.g-hero { height: 240px; }
+.g-hero-title { font-size: 36px; }
+.g-hero-stats { display: none; }
+.login-box { width: 300px; padding: 28px 24px; }
+.login-logo .word-true, .login-logo .word-life { font-size: 56px; }
+.actions-row { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+
+</head>
+<body>
+
+<!-- ====== LOGIN PAGE ====== -->
+
+<div id="login-page">
+  <div class="login-bg"></div>
+
+  <div class="login-logo">
+    <div class="word-true">*True*</div>
+    <div class="word-life">Life</div>
+  </div>
+
+  <div class="login-box">
+    <label>Username</label>
+    <input type="text" id="inp-user" placeholder="Enter username..." autocomplete="off">
+    <label>Password</label>
+    <input type="password" id="inp-pass" placeholder="••••••••">
+    <button class="btn-access" onclick="doLogin()">ACCESS</button>
+    <div class="login-error" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ====== GAME PAGE ====== -->
+
+<div id="game-page">
+
+  <!-- HEADER -->
+
+  <header class="g-header">
+    <div class="g-logo">
+      <em>True</em> Life
+      <span>| Gang Territory</span>
+    </div>
+    <nav class="g-nav">
+      <button class="g-nav-btn active" onclick="setNav(this,'territory')">Territory</button>
+      <button class="g-nav-btn" onclick="setNav(this,'missions')">Missions</button>
+      <button class="g-nav-btn" onclick="setNav(this,'crew')">Crew</button>
+      <button class="g-nav-btn" onclick="setNav(this,'market')">Market</button>
+      <button class="g-nav-btn" onclick="setNav(this,'stats')">Stats</button>
+    </nav>
+    <div class="g-user">
+      <div>
+        <div class="g-user-name" id="disp-name">—</div>
+        <div class="g-user-tag">🔴 GANG LEADER</div>
+      </div>
+      <div class="g-avatar" id="disp-av">?</div>
+      <button class="btn-logout" onclick="doLogout()">LOGOUT</button>
+    </div>
+  </header>
+
+  <!-- HERO IMAGE -->
+
+  <div class="g-hero">
+    <img class="g-hero-img" src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=80" alt="Los Santos">
+    <div class="g-hero-overlay"></div>
+    <div class="g-hero-content">
+      <div>
+        <div class="g-hero-title"><em>True</em> Life <span>| Gang Territory</span></div>
+        <div class="g-hero-sub">Control the Streets. Own the City.</div>
+      </div>
+      <div class="g-hero-stats">
+        <div>
+          <div class="h-stat-val">45%</div>
+          <div class="h-stat-lbl">Territory</div>
+        </div>
+        <div>
+          <div class="h-stat-val">28</div>
+          <div class="h-stat-lbl">Crew</div>
+        </div>
+        <div>
+          <div class="h-stat-val">#4</div>
+          <div class="h-stat-lbl">Rank</div>
+        </div>
+        <div>
+          <div class="h-stat-val" id="hero-cash">$12.5K</div>
+          <div class="h-stat-lbl">Cash</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+
+  <div class="g-main">
+
+```
+<!-- LEFT SIDEBAR -->
+<div class="g-sidebar-left">
+
+  <!-- Territory -->
+  <div class="sidebar-section">
+    <div class="sidebar-title">Territory</div>
+    <div class="territory-list">
+      <div class="territory-item owned" onclick="openMap('South Side')">
+        <div class="t-dot owned"></div>
+        <div class="t-name">South Side</div>
+        <div class="t-status">YOURS</div>
+      </div>
+      <div class="territory-item owned" onclick="openMap('Old Factory')">
+        <div class="t-dot owned"></div>
+        <div class="t-name">Old Factory</div>
+        <div class="t-status">YOURS</div>
+      </div>
+      <div class="territory-item conflict" onclick="openMap('Downtown')">
+        <div class="t-dot conflict"></div>
+        <div class="t-name">Downtown</div>
+        <div class="t-status">⚔ WAR</div>
+      </div>
+      <div class="territory-item neutral" onclick="openMap('Harbor')">
+        <div class="t-dot neutral"></div>
+        <div class="t-name">Harbor</div>
+        <div class="t-status">NEUTRAL</div>
+      </div>
+      <div class="territory-item enemy" onclick="openMap('North End')">
+        <div class="t-dot enemy"></div>
+        <div class="t-name">North End</div>
+        <div class="t-status">ENEMY</div>
+      </div>
+      <div class="territory-item enemy" onclick="openMap('Airport')">
+        <div class="t-dot enemy"></div>
+        <div class="t-name">Airport</div>
+        <div class="t-status">ENEMY</div>
+      </div>
+      <div class="territory-item neutral" onclick="openMap('Suburbs')">
+        <div class="t-dot neutral"></div>
+        <div class="t-name">Suburbs</div>
+        <div class="t-status">NEUTRAL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crew -->
+  <div class="sidebar-section">
+    <div class="sidebar-title">Crew Members</div>
+    <div class="crew-list">
+      <div class="crew-item">
+        <div class="crew-face">🦁</div>
+        <div class="crew-info">
+          <div class="c-name">Big Boss</div>
+          <div class="c-role">Lieutenant</div>
+        </div>
+        <div class="c-online on"></div>
+      </div>
+      <div class="crew-item">
+        <div class="crew-face">🐺</div>
+        <div class="crew-info">
+          <div class="c-name">The Wolf</div>
+          <div class="c-role">Enforcer</div>
+        </div>
+        <div class="c-online on"></div>
+      </div>
+      <div class="crew-item">
+        <div class="crew-face">🦅</div>
+        <div class="crew-info">
+          <div class="c-name">Eagle Eye</div>
+          <div class="c-role">Intel</div>
+        </div>
+        <div class="c-online busy"></div>
+      </div>
+      <div class="crew-item">
+        <div class="crew-face">🐯</div>
+        <div class="crew-info">
+          <div class="c-name">Ghost</div>
+          <div class="c-role">Driver</div>
+        </div>
+        <div class="c-online off"></div>
+      </div>
+      <div class="crew-item">
+        <div class="crew-face">🦊</div>
+        <div class="crew-info">
+          <div class="c-name">The Fox</div>
+          <div class="c-role">Negotiator</div>
+        </div>
+        <div class="c-online on"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CENTER -->
+<div class="g-center">
+
+  <!-- Control Bar -->
+  <div class="control-banner">
+    <div class="control-top">
+      <div class="control-label">Territory Control</div>
+      <div class="control-pct">45%</div>
+    </div>
+    <div class="control-bar">
+      <div class="cb-yours" style="width:45%">45%</div>
+      <div class="cb-neutral" style="width:25%">25%</div>
+      <div class="cb-enemy" style="width:30%">30%</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box red">
+      <div class="s-lbl">💰 Cash</div>
+      <div class="s-val" id="stat-cash">$12,500</div>
+      <div class="s-sub">↑ +$850 today</div>
+      <div class="s-bar"><div class="s-bar-fill" style="width:62%; background:var(--red)"></div></div>
+    </div>
+    <div class="stat-box gold">
+      <div class="s-lbl">⚡ XP</div>
+      <div class="s-val">4,280</div>
+      <div class="s-sub">Level 12 / 15</div>
+      <div class="s-bar"><div class="s-bar-fill" style="width:78%; background:var(--gold)"></div></div>
+    </div>
+    <div class="stat-box blue">
+      <div class="s-lbl">👥 Crew Size</div>
+      <div class="s-val">28</div>
+      <div class="s-sub">Capacity: 35</div>
+      <div class="s-bar"><div class="s-bar-fill" style="width:80%; background:#2980b9"></div></div>
+    </div>
+    <div class="stat-box green">
+      <div class="s-lbl">🎯 Reputation</div>
+      <div class="s-val">⭐ 847</div>
+      <div class="s-sub">Rank: #4 National</div>
+      <div class="s-bar"><div class="s-bar-fill" style="width:55%; background:#27ae60"></div></div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions-row">
+    <button class="act-btn" onclick="doAct('Attack')"><span class="a-ico">⚔️</span>Attack</button>
+    <button class="act-btn" onclick="doAct('Defend')"><span class="a-ico">🛡️</span>Defend</button>
+    <button class="act-btn" onclick="openMap('All')"><span class="a-ico">🗺️</span>Map</button>
+    <button class="act-btn" onclick="doAct('Scout')"><span class="a-ico">👁️</span>Scout</button>
+  </div>
+
+  <!-- Missions -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-name">Available Missions</div>
+      <div class="panel-tag">5 ACTIVE</div>
+    </div>
+    <div class="panel-body">
+      <div class="mission high" onclick="doMission('Warehouse Raid', 4500)">
+        <div class="m-icon">🏭</div>
+        <div class="m-info">
+          <div class="m-name">Warehouse Raid</div>
+          <div class="m-desc">Recover stolen goods from the East Harbor</div>
+        </div>
+        <div class="m-reward">
+          <div class="m-cash">$4,500</div>
+          <div class="m-xp">+320 XP</div>
+        </div>
+      </div>
+      <div class="mission high" onclick="doMission('Territory Expansion', 8000)">
+        <div class="m-icon">🗺️</div>
+        <div class="m-info">
+          <div class="m-name">Territory Expansion</div>
+          <div class="m-desc">Seize the West District before dawn</div>
+        </div>
+        <div class="m-reward">
+          <div class="m-cash">$8,000</div>
+          <div class="m-xp">+500 XP</div>
+        </div>
+      </div>
+      <div class="mission med" onclick="doMission('Protect the Shipment', 2200)">
+        <div class="m-icon">📦</div>
+        <div class="m-info">
+          <div class="m-name">Protect the Shipment</div>
+          <div class="m-desc">Escort the cargo to the safe house</div>
+        </div>
+        <div class="m-reward">
+          <div class="m-cash">$2,200</div>
+          <div class="m-xp">+180 XP</div>
+        </div>
+      </div>
+      <div class="mission med" onclick="doMission('Recruit Members', 1500)">
+        <div class="m-icon">👥</div>
+        <div class="m-info">
+          <div class="m-name">Recruit Members</div>
+          <div class="m-desc">Bring 3 new members into the crew</div>
+        </div>
+        <div class="m-reward">
+          <div class="m-cash">$1,500</div>
+          <div class="m-xp">+120 XP</div>
+        </div>
+      </div>
+      <div class="mission low" onclick="doMission('Collect Protection', 800)">
+        <div class="m-icon">💵</div>
+        <div class="m-info">
+          <div class="m-name">Collect Protection</div>
+          <div class="m-desc">Collect weekly fees from local businesses</div>
+        </div>
+        <div class="m-reward">
+          <div class="m-cash">$800</div>
+          <div class="m-xp">+60 XP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- RIGHT SIDEBAR -->
+<div class="g-sidebar-right">
+
+  <!-- Activity Feed -->
+  <div class="sidebar-section">
+    <div class="sidebar-title">Live Activity</div>
+    <div id="feed-list">
+      <div class="feed-item">
+        <div class="feed-dot"></div>
+        <div>
+          <div class="feed-text"><strong>The Wolf</strong> completed <span class="hi">Night Patrol</span></div>
+          <div class="feed-time">5 min ago</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-dot gold"></div>
+        <div>
+          <div class="feed-text">Attack on <strong>Downtown</strong> — battle ongoing</div>
+          <div class="feed-time">12 min ago</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-dot"></div>
+        <div>
+          <div class="feed-text">Collected <span class="hi">$1,200</span> from businesses</div>
+          <div class="feed-time">30 min ago</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-dot blue"></div>
+        <div>
+          <div class="feed-text"><strong>North End Gang</strong> is expanding territory</div>
+          <div class="feed-time">1 hour ago</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-dot"></div>
+        <div>
+          <div class="feed-text"><strong>Eagle Eye</strong> started intel mission</div>
+          <div class="feed-time">2 hours ago</div>
+        </div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-dot gold"></div>
+        <div>
+          <div class="feed-text">New record: <span class="hi">$8,200</span> earned this week</div>
+          <div class="feed-time">3 hours ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="sidebar-section">
+    <div class="sidebar-title">Leaderboard</div>
+    <div>
+      <div class="lb-item">
+        <div class="lb-rank top">1</div>
+        <div class="lb-name">The Syndicate</div>
+        <div class="lb-val">1,842</div>
+      </div>
+      <div class="lb-item">
+        <div class="lb-rank top">2</div>
+        <div class="lb-name">Iron Wolves</div>
+        <div class="lb-val">1,290</div>
+      </div>
+      <div class="lb-item">
+        <div class="lb-rank top">3</div>
+        <div class="lb-name">Los Santos Crew</div>
+        <div class="lb-val">1,044</div>
+      </div>
+      <div class="lb-item" style="border-left:2px solid var(--red)">
+        <div class="lb-rank" style="color:var(--red)">4</div>
+        <div class="lb-name" style="color:#fff" id="lb-myname">You</div>
+        <div class="lb-val">847</div>
+      </div>
+      <div class="lb-item">
+        <div class="lb-rank">5</div>
+        <div class="lb-name">Night Riders</div>
+        <div class="lb-val">712</div>
+      </div>
+      <div class="lb-item">
+        <div class="lb-rank">6</div>
+        <div class="lb-name">East Side Boys</div>
+        <div class="lb-val">589</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</div>
+
+<!-- ====== MAP MODAL ====== -->
+
+<div id="map-modal">
+  <div class="map-box">
+    <div class="map-head">
+      <div class="map-head-title">TERRITORY MAP — <span id="map-zone-name">ALL ZONES</span></div>
+      <button class="map-close" onclick="closeMap()">✕</button>
+    </div>
+    <div class="map-canvas">
+      <div class="map-grid-bg"></div>
+
+```
+  <div class="zone owned" style="left:4%;top:8%;width:20%;height:35%;" onclick="zoneClick('South Side')">
+    <div class="zone-n">South Side</div><div class="zone-s">YOURS</div>
+  </div>
+  <div class="zone owned" style="left:4%;top:48%;width:17%;height:28%;" onclick="zoneClick('Old Factory')">
+    <div class="zone-n">Old Factory</div><div class="zone-s">YOURS</div>
+  </div>
+  <div class="zone conflict" style="left:26%;top:15%;width:20%;height:38%;" onclick="zoneClick('Downtown')">
+    <div class="zone-n">Downtown</div><div class="zone-s">⚔ WAR</div>
+  </div>
+  <div class="zone neutral" style="left:26%;top:58%;width:20%;height:25%;" onclick="zoneClick('Harbor')">
+    <div class="zone-n">Harbor</div><div class="zone-s">NEUTRAL</div>
+  </div>
+  <div class="zone enemy" style="left:49%;top:8%;width:20%;height:35%;" onclick="zoneClick('North End')">
+    <div class="zone-n">North End</div><div class="zone-s">ENEMY</div>
+  </div>
+  <div class="zone enemy" style="left:49%;top:48%;width:18%;height:28%;" onclick="zoneClick('Airport')">
+    <div class="zone-n">Airport</div><div class="zone-s">ENEMY</div>
+  </div>
+  <div class="zone neutral" style="left:72%;top:12%;width:24%;height:68%;" onclick="zoneClick('Suburbs')">
+    <div class="zone-n">Suburbs</div><div class="zone-s">NEUTRAL</div>
+  </div>
+
+  <div class="map-legend">
+    <div class="ml-item"><div class="ml-dot" style="background:var(--red)"></div>Yours</div>
+    <div class="ml-item"><div class="ml-dot" style="background:#2980b9"></div>Enemy</div>
+    <div class="ml-item"><div class="ml-dot" style="background:var(--gold)"></div>War</div>
+    <div class="ml-item"><div class="ml-dot" style="background:#555"></div>Neutral</div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+
+<div class="notif" id="notif">
+  <div class="notif-title" id="notif-t">ALERT</div>
+  <div id="notif-m">—</div>
+</div>
+
+<script>
+// ---- STATE ----
+let cash = 12500;
+
+// ---- LOGIN ----
+function doLogin() {
+  const u = document.getElementById('inp-user').value.trim();
+  const p = document.getElementById('inp-pass').value.trim();
+  const e = document.getElementById('login-err');
+  if (!u) { e.textContent = '⚠ Username required'; return; }
+  if (p.length < 4) { e.textContent = '⚠ Password must be at least 4 characters'; return; }
+  e.textContent = '';
+
+  document.getElementById('disp-name').textContent = u;
+  document.getElementById('disp-av').textContent = u[0].toUpperCase();
+  document.getElementById('lb-myname').textContent = u;
+
+  document.getElementById('login-page').classList.add('out');
+  setTimeout(() => {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('game-page').classList.add('show');
+    notify('WELCOME BACK', `You're logged in as ${u}. The streets await.`);
+  }, 700);
+}
+
+function doLogout() {
+  document.getElementById('login-page').style.display = '';
+  setTimeout(() => document.getElementById('login-page').classList.remove('out'), 10);
+  document.getElementById('game-page').classList.remove('show');
+  document.getElementById('inp-user').value = '';
+  document.getElementById('inp-pass').value = '';
+}
+
+document.getElementById('inp-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('inp-user').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+// ---- NAV ----
+function setNav(btn, tab) {
+  document.querySelectorAll('.g-nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ---- MAP ----
+function openMap(zone) {
+  document.getElementById('map-zone-name').textContent = zone.toUpperCase();
+  document.getElementById('map-modal').classList.add('open');
+}
+function closeMap() {
+  document.getElementById('map-modal').classList.remove('open');
+}
+function zoneClick(name) {
+  closeMap();
+  notify('📍 ZONE SELECTED', `${name} — Choose your action: Attack, Defend or Scout`);
+}
+
+// ---- ACTIONS ----
+function doAct(act) {
+  const msgs = {
+    Attack: ['⚔ ATTACK LAUNCHED', 'Your crew is moving in on enemy territory.'],
+    Defend: ['🛡 DEFENSES SET', 'Reinforcements deployed across your zones.'],
+    Scout:  ['👁 SCOUTING', 'Intel team dispatched. Report incoming.'],
+  };
+  const [t,m] = msgs[act] || ['ACTION', 'Done.'];
+  notify(t, m);
+}
+
+// ---- MISSIONS ----
+function doMission(name, reward) {
+  notify('🎯 MISSION STARTED', `${name} — Good luck out there.`);
+  setTimeout(() => {
+    const gain = Math.floor(reward * 0.6 + Math.random() * reward * 0.4);
+    cash += gain;
+    document.getElementById('stat-cash').textContent = '$' + cash.toLocaleString('en');
+    document.getElementById('hero-cash').textContent = '$' + (cash/1000).toFixed(1) + 'K';
+
+    // Add to feed
+    const feed = document.getElementById('feed-list');
+    const item = document.createElement('div');
+    item.className = 'feed-item';
+    item.innerHTML = `<div class="feed-dot"></div><div><div class="feed-text">Mission <strong>${name}</strong> complete — earned <span class="hi">$${gain.toLocaleString()}</span></div><div class="feed-time">Just now</div></div>`;
+    feed.insertBefore(item, feed.firstChild);
+
+    notify('✅ MISSION COMPLETE', `+$${gain.toLocaleString()} added to your account.`);
+  }, 3000);
+}
+
+// ---- NOTIFY ----
+let ntimer;
+function notify(title, msg) {
+  document.getElementById('notif-t').textContent = title;
+  document.getElementById('notif-m').textContent = msg;
+  const el = document.getElementById('notif');
+  el.classList.add('show');
+  clearTimeout(ntimer);
+  ntimer = setTimeout(() => el.classList.remove('show'), 3800);
+}
+
+// Close map on backdrop click
+document.getElementById('map-modal').addEventListener('click', function(e) {
+  if(e.target === this) closeMap();
+});
+</script>
+
+</body>
+</html>
